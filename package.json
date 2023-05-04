@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Collectible Pleasures DApp",
   "main": "README.md",
-  "scripts": {
-    "test": "cd web3 && npx hardhat test"
-  },
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eduairet/collectible-pleasures.git"
