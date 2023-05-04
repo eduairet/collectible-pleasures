@@ -1,0 +1,37 @@
+{
+  "name": "collectible-pleasures",
+  "version": "1.0.0",
+  "description": "Collectible Pleasures DApp",
+  "main": "README.md",
+  "scripts": {
+    "test": "cd web3 && npx hardhat test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduairet/collectible-pleasures.git"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "typescript",
+    "nextjs",
+    "material-ui",
+    "ethereum",
+    "ipfs",
+    "smart-contracts",
+    "polygon",
+    "solidity",
+    "p5js",
+    "alchemy",
+    "nft",
+    "ethers",
+    "openzeppelin",
+    "hardhat"
+  ],
+  "author": "Eduardo Aire Torres",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eduairet/collectible-pleasures/issues"
+  },
+  "homepage": "https://github.com/eduairet/collectible-pleasures#readme"
+}
