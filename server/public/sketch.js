@@ -1,67 +1,62 @@
-const [w, h] = [640, 640],
-    side = parseInt(w / 3),
-    lineSpace = h / 60;
+const [w, h] = [640, 640], // width, height
+    lw = w / 3, // letter width
+    lineSpace = h / 50; // space between lines
 
 function setup() {
+    frameRate(12);
     createCanvas(w, h);
 }
 
 function draw() {
-    noLoop();
     background(0);
-    sign();
+    nft('GHI');
 }
 
-function module(reps, kndList, m = 0, xTrans = 0) {
-    fill(0);
-    stroke(1);
-    strokeWeight(0.75);
-    for (let i = 0; i < reps; i++) {
-        points = lsPts(kndList);
-        push();
-        fill(255);
-        translate(xTrans, side * 0.1 + m);
-        for (let j = 0; j < points.length; j++) {
-            console.log(points[j]);
-            ellipse(points[j].x, points[j].y, 5, 5);
-        }
-        pop();
-        m += h / 60;
+function nft(selection) {
+    for (const [i, letter] of [...selection].entries()) {
+        position = lw * i;
+        for (const mod of letters[letter]) module(...mod, position);
     }
 }
 
-function sign(xTrans) {
-    //E
-    module(int((h * 0.1) / lineSpace), 1);
-    module(int((h * 0.3) / lineSpace), 2, h * 0.1);
-    module(int((h * 0.1) / lineSpace), 1, h * 0.4);
-    module(int((h * 0.3) / lineSpace), 2, h * 0.5);
-    module(int((h * 0.1) / lineSpace), 1, h * 0.8);
-    //A
-    module(int((h * 0.3) / lineSpace), 3, (xTrans = side));
-    module(int((h * 0.1) / lineSpace), 1, h * 0.3, side);
-    module(int((h * 0.4) / lineSpace), 3, h * 0.4, side);
-    //T
-    module(int((h * 0.8) / lineSpace), 4, (xTrans = side * 2));
-    module(int((h * 0.1) / lineSpace), 1, h * 0.8, side * 2);
+function module(reps, kndList, wave = 0, xTrans = 0) {
+    noFill();
+    stroke(255);
+    strokeWeight(1.5);
+    for (let _ = 0; _ < reps; _++) {
+        const points = lsPts(kndList);
+        push();
+        translate(xTrans, lw * 0.1 + wave);
+        beginShape();
+        for (const p of points) vertex(p.x, p.y);
+        endShape();
+        pop();
+        wave += lineSpace;
+    }
 }
 
-function lsPts(num, m = side * 0.4) {
+function lsPts(num, wave = lw * 0.4) {
     const points = [];
-    for (let x = 0; x < side; x += 12) {
+    for (let x = 0; x < lw; x += 10) {
         let y;
         switch (num) {
             case 1:
-                y = setY(x, m, 0.1, 0.9);
+                y = setY(x, wave, 0.1, 0.9);
                 break;
             case 2:
-                y = setY(x, m, 0.1, 0.4);
+                y = setY(x, wave, 0.1, 0.4);
                 break;
             case 3:
-                y = setY(x, m, 0.1, 0.9, true);
+                y = setY(x, wave, 0.1, 0.9, true);
                 break;
             case 4:
-                y = setY(x, m, 0.35, 0.65);
+                y = setY(x, wave, 0.35, 0.65);
+                break;
+            case 5:
+                y = setY(x, wave, 0.1, 0.7);
+                break;
+            case 6:
+                y = setY(x, wave, 0.1, 0.9, true, { l: 0.1, r: 0.01 });
                 break;
             default:
                 break;
@@ -72,26 +67,102 @@ function lsPts(num, m = side * 0.4) {
     return points;
 }
 
-function setY(x, m, left, right, chopped = false) {
-    const half = (right - left) / 2,
-        a =
-            (x < 0 && x < side * left) || chopped
-                ? (x >= side * (half - 0.1) && x < side * (half + 0.1)) ||
-                  (x >= side * right && x <= side)
-                : x >= side * right && x <= side,
-        b =
-            x >= side * left && chopped
-                ? x <= side * (half - 0.1) ||
-                  half + 0.1 <= x < side * (half - 0.2)
-                : x <= side * half,
-        c =
-            x >= side * half && chopped
-                ? x <= side * (half - 0.1) ||
-                  (x > side * (half + 0.2) && x < side * right)
-                : x >= (x <= side * right);
+function setY(x, wave, left, right, chopped = false, ch = { l: 0.1, r: 0.1 }) {
+    const half = left + (right - left) / 2,
+        [a1, a2, a3] = [
+            x > 0 && x < lw * left,
+            x > lw * right && x <= lw,
+            x > lw * (half - ch.l) && x < lw * (half + ch.r),
+        ],
+        [b1, b2, b3, b4] = [
+            x > lw * left,
+            x <= lw * half,
+            x <= lw * (half - ch.l * 2),
+            x > lw * (half + ch.r) && x < lw * (half + ch.r * 2),
+        ],
+        [c1, c2, c3, c4] = [
+            x > lw * half,
+            x <= lw * right,
+            x > lw * (half - ch.l * 2) && x <= lw * (half - ch.l),
+            x >= lw * (half + ch.r * 2),
+        ];
+    let [a, b, c] = [a1 || a2, b1 && b2, c1 && c2];
+    if (chopped) {
+        a = a1 || a3 || a2;
+        b = (b1 && b3) || b4;
+        c = c3 || (c4 && c2);
+    }
     let y;
     if (a) y = sin(x * random(1, 3));
     else if (b) y = (x * sin(radians(x * random(-100, 100)))) / 10;
-    else if (c) y = (m * sin(radians(m * random(-100, 100)))) / 10;
+    else if (c) y = (wave * sin(radians(wave * random(-100, 100)))) / 10;
+    else y = 0;
     return y;
 }
+
+/**
+ * Alphabet that will be use within the module function
+ * @type {Object}
+ * Each letter has an array of:
+ * @type {number, number, number}
+ * these values will be passed to the function module()
+ * and the position will be defined by the function nft()
+ */
+var letters = {
+    A: [
+        [(h * 0.1) / lineSpace, 1, 0],
+        [(h * 0.4) / lineSpace, 3, h * 0.1],
+        [(h * 0.1) / lineSpace, 1, h * 0.5],
+        [(h * 0.3) / lineSpace, 3, h * 0.6],
+    ],
+    B: [
+        [(h * 0.1) / lineSpace, 5, 0],
+        [(h * 0.3) / lineSpace, 3, h * 0.1],
+        [(h * 0.1) / lineSpace, 5, h * 0.4],
+        [(h * 0.3) / lineSpace, 3, h * 0.5],
+        [(h * 0.1) / lineSpace, 5, h * 0.8],
+    ],
+    C: [
+        [(h * 0.1) / lineSpace, 1, 0],
+        [(h * 0.1) / lineSpace, 3, h * 0.1],
+        [(h * 0.5) / lineSpace, 2, h * 0.2],
+        [(h * 0.1) / lineSpace, 3, h * 0.7],
+        [(h * 0.1) / lineSpace, 1, h * 0.8],
+    ],
+    D: [
+        [(h * 0.1) / lineSpace, 5, 0],
+        [(h * 0.7) / lineSpace, 3, h * 0.1],
+        [(h * 0.1) / lineSpace, 5, h * 0.8],
+    ],
+    E: [
+        [(h * 0.1) / lineSpace, 1, 0],
+        [(h * 0.3) / lineSpace, 2, h * 0.1],
+        [(h * 0.1) / lineSpace, 1, h * 0.4],
+        [(h * 0.3) / lineSpace, 2, h * 0.5],
+        [(h * 0.1) / lineSpace, 1, h * 0.8],
+    ],
+    F: [
+        [(h * 0.1) / lineSpace, 1, 0],
+        [(h * 0.3) / lineSpace, 2, h * 0.1],
+        [(h * 0.1) / lineSpace, 1, h * 0.4],
+        [(h * 0.4) / lineSpace, 2, h * 0.5],
+    ],
+    G: [
+        [(h * 0.1) / lineSpace, 1, 0],
+        [(h * 0.1) / lineSpace, 3, h * 0.1],
+        [(h * 0.2) / lineSpace, 2, h * 0.2],
+        [(h * 0.1) / lineSpace, 6, h * 0.4],
+        [(h * 0.3) / lineSpace, 3, h * 0.5],
+        [(h * 0.1) / lineSpace, 1, h * 0.8],
+    ],
+    H: [
+        [(h * 0.4) / lineSpace, 3, 0],
+        [(h * 0.1) / lineSpace, 1, h * 0.4],
+        [(h * 0.4) / lineSpace, 3, h * 0.5],
+    ],
+    I: [[(h * 0.9) / lineSpace, 4, 0, lw * 2]],
+    T: [
+        [(h * 0.1) / lineSpace, 1, 0, lw * 2],
+        [(h * 0.8) / lineSpace, 4, h * 0.1, lw * 2],
+    ],
+};
