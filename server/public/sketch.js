@@ -28,13 +28,30 @@ function draw() {
     nft(nftSel);
 }
 
+/**
+ * This function runs the module function over every letter in the selection
+ * @param {*} selection
+ * @type {string} Taken from the url nft query
+ */
 function nft(selection) {
+    // Base cases that can make an error: lowercase, less than 3 letters, more than 3 letters
+    selection = selection.toUpperCase();
+    if (selection.length < 3) selection = selection.padEnd(3, ' ');
+    else if (selection.length > 3) selection = selection.slice(0, 3);
     for (const [i, letter] of [...selection].entries()) {
         position = lw * i;
         for (const mod of letters[letter]) module(...mod, position);
     }
 }
 
+/**
+ * This function creates every modules of waves
+ * the movement is determined by the lsPts function
+ * @param {*} reps @type {number} Number of repetitions of the waves
+ * @param {*} kndList @type {number} Kind of list to use
+ * @param {*} wave @type {number} Wave height
+ * @param {*} xTrans @type {number} X translation
+ */
 function module(reps, kndList, wave = 0, xTrans = 0) {
     noFill();
     stroke(255);
@@ -51,8 +68,15 @@ function module(reps, kndList, wave = 0, xTrans = 0) {
     }
 }
 
+/**
+ * This function sets the movement of the waves across their width
+ * @param {*} num @type {number} Kind of list to use
+ * @param {*} wave @type {number} Wave height
+ * @returns {array} Array of points
+ */
 function lsPts(num, wave = lw * 0.5) {
     const points = [];
+    // Different kind of shapes used across the alphabet
     for (let x = 0; x < lw; x += 4) {
         let y;
         switch (num) {
@@ -92,6 +116,18 @@ function lsPts(num, wave = lw * 0.5) {
     return points;
 }
 
+/**
+ * This function sets the random y coordinate
+ * of a point with deterministic x coordinate
+ * @param {*} x Current advance over the width of the letter
+ * @param {*} wave Current wave
+ * @param {*} left Left bound of the letter
+ * @param {*} right Right bound of the letter
+ * @param {*} chopped Indicates if the letter drawing is chopped
+ * @param {*} chops Number of chops
+ * @param {*} ch {x, y} offsets of the chops
+ * @returns {number} the coordinate of the y point
+ */
 function setY(
     x,
     wave,
@@ -101,6 +137,7 @@ function setY(
     chops = 2,
     ch = { l: 0.1, r: 0.1 }
 ) {
+    // All possibilities to determine the y coordinate variations
     const half = left + (right - left) / 2,
         third = left + (right - left) / 3,
         [a1, a2, a3, a4] = [
@@ -134,6 +171,7 @@ function setY(
         b = (b1 && b3) || b5;
         c = c3 || (c5 && c2);
     }
+    // Set the y variation depending on the condition achieved by the parameters provided
     let y;
     if (a) y = sin(x * random(1, 3));
     else if (b) y = (x * sin(radians(x * random(-100, 100)))) / 10;
