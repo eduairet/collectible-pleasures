@@ -2,12 +2,16 @@
   "name": "collectible-pleasures-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon index.js"
+    "sketch": "browser-sync start --proxy localhost:8080 --files 'public/**/*'",
+    "server": "nodemon index.js",
+    "start": "concurrently \"npm run server\" \"npm run sketch\""
   },
   "dependencies": {
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "concurrently": "^8.0.1",
+    "browser-sync": "^2.29.1",
     "dotenv": "^16.0.3",
     "nodemon": "^2.0.22"
   }
