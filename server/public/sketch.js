@@ -5,7 +5,6 @@ const [w, h] = [640, 640], // width, height
     queries = new URLSearchParams(search),
     nftSel = queries.get('nft');
 
-console.log(nftSel);
 /**
  * The p5 setup function sets the canvas and the frame rate
  * @returns {void} to 12 frames per second
@@ -25,7 +24,7 @@ function setup() {
  */
 function draw() {
     background(0);
-    nft(nftSel);
+    nft(nftSel || '');
 }
 
 /**
