@@ -1,9 +1,9 @@
 'use strict';
 
 const express = require('express'),
-    { createSketch } = require('../controllers/sketch-controller'),
+    { createSketch, mintSketch } = require('../controllers/sketch-controller'),
     router = express.Router();
 
-router.get('/', createSketch);
+router.route('/').get(createSketch).post(mintSketch);
 
 module.exports = router;

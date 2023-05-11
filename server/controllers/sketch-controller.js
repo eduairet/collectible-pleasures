@@ -1,8 +1,15 @@
 'use strict';
 
-const path = require('path');
+const path = require('path'),
+    dir = path.dirname(__dirname),
+    filePath = path.join(dir, 'public', 'sketch.html');
 
 const createSketch = (req, res) => {
+    if (!Object.keys(req.query)) {
+        res.status(200).send('Write a query to generate your art');
+        return;
+    }
+
     const { nft } = req.query;
 
     if (!nft || !/^[a-zA-Z]{1,3}$/.test(nft)) {
@@ -11,10 +18,11 @@ const createSketch = (req, res) => {
         );
         return;
     }
-
-    const dir = path.dirname(__dirname),
-        filePath = path.join(dir, 'public', 'sketch.html');
     res.status(200).sendFile(filePath);
 };
 
-module.exports = { createSketch };
+const mintSketch = (req, res) => {
+    res.status(200).send('minting');
+};
+
+module.exports = { createSketch, mintSketch };

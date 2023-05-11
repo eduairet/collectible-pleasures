@@ -1,9 +1,7 @@
 const [w, h] = [640, 640], // width, height
     lw = w / 3, // letter width
-    lineSpace = h / 50, // space between lines
-    search = document.location.search,
-    queries = new URLSearchParams(search),
-    nftSel = queries.get('nft');
+    lineSpace = h / 50; // space between lines
+let nft; // NFT text to be defined during setup
 
 /**
  * The p5 setup function sets the canvas and the frame rate
@@ -15,6 +13,7 @@ const [w, h] = [640, 640], // width, height
 function setup() {
     frameRate(12);
     createCanvas(w, h);
+    nft = getURLParams().nft;
 }
 /**
  * The p5 draw function
@@ -24,7 +23,7 @@ function setup() {
  */
 function draw() {
     background(0);
-    nft(nftSel || '');
+    createNft(nft || '');
 }
 
 /**
@@ -32,12 +31,12 @@ function draw() {
  * @param {*} selection
  * @type {string} Taken from the url nft query
  */
-function nft(selection) {
+function createNft(nft) {
     // Base cases that can make an error: lowercase, less than 3 letters, more than 3 letters
-    selection = selection.toUpperCase();
-    if (selection.length < 3) selection = selection.padEnd(3, ' ');
-    else if (selection.length > 3) selection = selection.slice(0, 3);
-    for (const [i, letter] of [...selection].entries()) {
+    nft = nft.toUpperCase();
+    if (nft.length < 3) nft = nft.padEnd(3, ' ');
+    else if (nft.length > 3) nft = nft.slice(0, 3);
+    for (const [i, letter] of [...nft].entries()) {
         position = lw * i;
         for (const mod of letters[letter]) module(...mod, position);
     }
