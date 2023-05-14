@@ -2,7 +2,9 @@
   "name": "collectible-pleasures-contract",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon index.js"
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.ts",
+    "test": "npx hardhat test"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
