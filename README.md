@@ -21,7 +21,7 @@ The Collectible Pleasures DApp allows you to mint an NFT with 3 letters, Unknown
 -   Tech stack
 
     -   Web3: `solidity` `ethers` `hardhat` `openzeppelin` `ethereum` `polygon` `alchemy`
-    -   Frontend: `Next.js` `React.js` `tailwind` `Material UI` `Typescript`
+    -   Frontend: `next.js` `react.js` `tailwind` `typescript`
     -   Backend: `express.js` `p5.js` `IPFS` `javascript`
 
 ## Contributors
