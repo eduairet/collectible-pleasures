@@ -1,10 +1,6 @@
 # Collectible Pleasures
 
- <object data="./_images/logo.pdf" type="application/pdf" width="300px" height="300px">
-    <embed src="./_images/logo.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="./_images/logo.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+![CP logo](./_images/cp.png)
 
 The Collectible Pleasures DApp allows you to mint an NFT with 3 letters, Unknown Pleasures style, the client has a simple input field that takes the letters selected by the user (just uppercase) and uses the p5.js library behind the scenes to create the NFT.
 
