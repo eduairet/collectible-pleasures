@@ -5,18 +5,20 @@ export default function NFTForm() {
         mint = (e: any) => e.preventDefault();
 
     return (
-        <form className='flex flex-col gap-2 mt-4' onSubmit={mint}>
+        <form
+            className='w-full max-w-sm flex flex-col gap-6 mt-4 px-3'
+            onSubmit={mint}
+        >
             <input
-                className='border-2 border-gray-300 rounded-lg p-2 w-full black'
+                className='text-center text-2xl rounded-md p-2 w-full black text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75'
                 type='text'
-                placeholder='Enter NFT Name'
                 value={nftName}
                 onChange={e => setNftName(e.target.value)}
             />
             <input
                 type='submit'
-                value='Mint NFT'
-                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                value='MINT'
+                className='mx-auto w-20 h-20 cursor-pointer rounded-full bg-black text-white border-white border-2 font-semibold hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75 ease-in-out duration-300'
             />
         </form>
     );

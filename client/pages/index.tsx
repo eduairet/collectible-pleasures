@@ -1,22 +1,19 @@
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
+import Header from '@/components/Header';
 import NFTForm from '../components/NFTForm';
+import Footer from '@/components/Footer';
 
-const inter = Inter({ subsets: ['latin'] });
+const containerClass =
+    'container mx-auto flex max-w-600 flex-col items-center justify-start';
 
 export default function Home() {
     return (
-        <main
-            className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-        >
-            <Image
-                alt='Collectible Pleasures Logo'
-                src='/cp.svg'
-                width={200}
-                height={200}
-            ></Image>
-            <h1>Collectible Pleasures</h1>
-            <NFTForm />
-        </main>
+        <>
+            <Header />
+            <main className='container mx-auto flex max-w-600 flex-col items-center justify-start mb-24'>
+                {' '}
+                <NFTForm />
+            </main>
+            <Footer />
+        </>
     );
 }
