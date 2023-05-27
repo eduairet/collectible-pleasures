@@ -3,7 +3,6 @@ import axios from 'axios';
 
 export default function NFTForm() {
     const [nftName, setNftName] = useState('NFT'),
-        mint = (e: any) => e.preventDefault(),
         getPreview = useCallback(async () => {
             const { data } = await axios.get(`/api/preview`, {
                 params: {
@@ -12,8 +11,7 @@ export default function NFTForm() {
             });
             return data;
         }, [nftName]),
-        handleMint = useCallback(async (e: Event) => {
-            e.preventDefault();
+        handleMint = useCallback(async () => {
             console.log('Minting...');
         }, []);
 
@@ -24,7 +22,10 @@ export default function NFTForm() {
     return (
         <form
             className='w-full max-w-sm flex flex-col gap-6 mt-4 px-3'
-            onSubmit={handleMint}
+            onSubmit={e => {
+                e.preventDefault();
+                handleMint();
+            }}
         >
             <label htmlFor='nft' className='text-center text-lg'>
                 Type your 3 letter NFT name
