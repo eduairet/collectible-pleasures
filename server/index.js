@@ -8,12 +8,11 @@ const express = require('express'),
     sketch = require('./routes/sketch-route');
 
 require('dotenv').config();
-const cosrsOptions = {
+const corsOptions = {
     origin: process.env.CORS_ORIGIN,
-    optionsSuccessStatus: 200,
 };
 
 app.use(morgan('tiny'), express.static('./public'));
-app.use(cors(cosrsOptions));
+app.use(cors(corsOptions));
 app.use('/', sketch);
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
