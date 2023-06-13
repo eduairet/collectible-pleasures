@@ -13,13 +13,14 @@ export default async function handler(
     try {
         const { nft } = req.query;
         if (NEXT_PUBLIC_SERVER && nft) {
-            const previewURL = `${NEXT_PUBLIC_SERVER}?nft=${nft}`;
-            console.log(previewURL);
+            console.log('Mint');
             const response = await fetch(`${NEXT_PUBLIC_SERVER}?nft=${nft}`);
-            console.log(response);
+            if (!response.ok) {
+                throw new Error('There was something wrong with your minting, reload the page and try again!');
+            }
             res.status(200).send(response);
         } else {
-            throw new Error('API URL is not working');
+            throw new Error('Fix your query and try again!');
         }
     } catch (error) {
         res.status(500).json({

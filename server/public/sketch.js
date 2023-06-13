@@ -1,4 +1,4 @@
-const [w, h] = [640, 640], // width, height
+const [w, h] = [350, 350], // width, height
     lw = w / 3, // letter width
     lineSpace = h / 50; // space between lines
 let nft; // NFT text to be defined during setup

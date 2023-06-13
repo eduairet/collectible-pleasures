@@ -1,23 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import { useCallback, useContext } from 'react';
+import { NftContext } from '@/store/NFTContext';
+import Preview from '@/components/Preview';
 
 export default function NFTForm() {
-    const [nftName, setNftName] = useState('NFT'),
-        getPreview = useCallback(async () => {
-            const { data } = await axios.get(`/api/preview`, {
-                params: {
-                    nft: nftName || '   ',
-                },
-            });
-            return data;
-        }, [nftName]),
+    const nftCtx = useContext(NftContext),
         handleMint = useCallback(async () => {
             console.log('Minting...');
         }, []);
-
-    useEffect(() => {
-        getPreview();
-    }, [getPreview]);
 
     return (
         <form
@@ -36,12 +25,12 @@ export default function NFTForm() {
                 type='text'
                 minLength={1}
                 maxLength={3}
-                value={nftName}
+                value={nftCtx?.nft}
                 onChange={e => {
-                    setNftName(e.target.value);
-                    getPreview();
+                    nftCtx?.handleNft(e.target.value);
                 }}
             />
+            <Preview />
             <input
                 type='submit'
                 value='MINT'
