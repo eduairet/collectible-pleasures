@@ -9,7 +9,7 @@ const express = require('express'),
 
 require('dotenv').config();
 const corsOptions = {
-    origin: process.env.CORS_ORIGIN,
+    origin: `${process.env.CORS_ORIGIN}/*`,
 };
 
 app.use(morgan('tiny'), express.static('./public'));
