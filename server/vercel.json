@@ -3,15 +3,7 @@
     "builds": [
         {
             "src": "/index.js",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": [
-                    "public/letters.js",
-                    "public/sketch.html",
-                    "public/sketch.js",
-                    "public/style.css"
-                ]
-            }
+            "use": "@vercel/node"
         }
     ],
     "routes": [
