@@ -12,9 +12,9 @@ const corsUrl = process.env.CORS_ORIGIN,
     corsOptions = {
         origin: [
             `${corsUrl}`,
-            `${corsUrl}style.css`,
-            `${corsUrl}sketch.css`,
-            `${corsUrl}letters.css`,
+            `${corsUrl}/style.css`,
+            `${corsUrl}/sketch.js`,
+            `${corsUrl}/letters.js`,
         ],
     };
 
