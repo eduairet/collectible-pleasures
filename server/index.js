@@ -14,6 +14,6 @@ const corsUrl = process.env.CORS_ORIGIN,
     };
 
 app.use(morgan('tiny'), express.static('./public'));
-app.use(cors(corsOptions));
+app.use(cors('*'));
 app.use('/', sketch);
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
