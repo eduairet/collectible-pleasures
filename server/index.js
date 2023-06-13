@@ -10,10 +10,10 @@ const express = require('express'),
 require('dotenv').config();
 const corsUrl = process.env.CORS_ORIGIN,
     corsOptions = {
-        origin: corsUrl
+        origin: corsUrl,
     };
 
 app.use(morgan('tiny'), express.static('./public'));
-app.use(cors('*'));
+app.use(cors(corsOptions));
 app.use('/', sketch);
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
