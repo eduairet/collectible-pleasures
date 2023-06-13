@@ -10,12 +10,7 @@ const express = require('express'),
 require('dotenv').config();
 const corsUrl = process.env.CORS_ORIGIN,
     corsOptions = {
-        origin: [
-            `${corsUrl}`,
-            `${corsUrl}/style.css`,
-            `${corsUrl}/sketch.js`,
-            `${corsUrl}/letters.js`,
-        ],
+        origin: corsUrl
     };
 
 app.use(morgan('tiny'), express.static('./public'));
