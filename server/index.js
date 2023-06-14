@@ -13,6 +13,6 @@ const corsOptions = {
 };
 
 app.use(morgan('tiny'));
-app.use(cors(corsOptions));
+app.use(cors('*'));
 app.use('/', sketch);
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
