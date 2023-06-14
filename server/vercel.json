@@ -1,27 +1,28 @@
 {
     "version": 2,
+    "devCommand": "nodemon index.js",
+    "framework": null,
+    "installCommand": "npm install",
+    "public": true,
+    "headers": [
+        {
+            "source": "/",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                }
+            ]
+        }
+    ],
     "builds": [
         {
             "src": "index.js",
             "use": "@vercel/node"
         },
         {
-            "src": "public/**",
+            "src": "public/*",
             "use": "@vercel/static"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "index.js"
-        },
-        {
-            "src": "/?nft=*",
-            "dest": "public/sketch.html"
-        },
-        {
-            "src": "/(.+)",
-            "dest": "public/$1"
         }
     ]
 }

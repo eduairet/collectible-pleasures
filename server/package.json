@@ -1,10 +1,12 @@
 {
   "name": "collectible-pleasures-server",
+  "buildCommand": "npm run vercel-build",
   "version": "1.0.0",
   "scripts": {
     "sketch": "browser-sync start --proxy localhost:8080 --files 'public/**/*'",
     "server": "nodemon index.js",
-    "start": "concurrently \"npm run server\" \"npm run sketch\""
+    "start": "concurrently \"npm run server\" \"npm run sketch\"",
+    "vercel-build": "echo \"collectible pleasures\""
   },
   "dependencies": {
     "cors": "^2.8.5",
