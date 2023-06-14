@@ -8,9 +8,9 @@ const express = require('express'),
     sketch = require('./routes/sketch-route');
 
 require('dotenv').config();
-const corsUrl = process.env.CORS_ORIGIN,
+const { CORS_ORIGIN, SERVER_ORIGIN } = process.env,
     corsOptions = {
-        origin: corsUrl,
+        origin: [CORS_ORIGIN, SERVER_ORIGIN],
     };
 
 app.use(morgan('tiny'), express.static('./public'));
