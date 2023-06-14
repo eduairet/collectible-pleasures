@@ -2,11 +2,15 @@
   "name": "collectible-pleasures-server",
   "buildCommand": "npm run vercel-build",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
+    "build": "echo \"Collectible Pleasures\"",
     "sketch": "browser-sync start --proxy localhost:8080 --files 'public/**/*'",
+    "start": "node index.js",
     "server": "nodemon index.js",
-    "start": "concurrently \"npm run server\" \"npm run sketch\"",
-    "vercel-build": "echo \"collectible pleasures\""
+    "dev": "concurrently \"npm run server\" \"npm run sketch\""
   },
   "dependencies": {
     "cors": "^2.8.5",
