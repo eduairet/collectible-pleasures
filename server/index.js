@@ -13,7 +13,7 @@ const { CORS_ORIGIN } = process.env,
         origin: CORS_ORIGIN,
     };
 
-app.use(morgan('tiny'), express.static('./public'));
+app.use(morgan('tiny'));
 app.use(cors(corsOptions));
 app.use('/', sketch);
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

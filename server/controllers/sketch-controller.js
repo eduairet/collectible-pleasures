@@ -21,8 +21,20 @@ const createSketch = (req, res) => {
     res.status(200).sendFile(filePath);
 };
 
+const sendStyles = (req, res) => {
+    res.status(200).sendFile(path.join(dir, 'public', 'style.css'));
+};
+
+const sendLetters = (req, res) => {
+    res.status(200).sendFile(path.join(dir, 'public', 'letters.js'));
+};
+
+const sendSketch = (req, res) => {
+    res.status(200).sendFile(path.join(dir, 'public', 'sketch.js'));
+};
+
 const mintSketch = (req, res) => {
     res.status(200).send('minting');
 };
 
-module.exports = { createSketch, mintSketch };
+module.exports = { createSketch, mintSketch, sendStyles, sendLetters, sendSketch };
