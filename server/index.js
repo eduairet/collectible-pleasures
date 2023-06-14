@@ -10,7 +10,7 @@ const express = require('express'),
 require('dotenv').config();
 const { CORS_ORIGIN } = process.env,
     corsOptions = {
-        origin: CORS_ORIGIN,
+        origin: `${CORS_ORIGIN}/*`,
     };
 
 app.use(morgan('tiny'));
