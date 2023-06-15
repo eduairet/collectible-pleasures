@@ -1,22 +1,20 @@
 import { ethers } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
+import { JsonRpcSigner } from '@ethersproject/providers/lib/json-rpc-provider';
 
-const { getContractFactory } = ethers;
+const { getContractFactory, provider } = ethers
 
 async function main(): Promise<void> {
-    const CollectiblePleasures: ContractFactory = await getContractFactory(
-            'CollectiblePleasures'
-        ),
-        collectiblePleasures: Contract = await CollectiblePleasures.deploy();
-    await collectiblePleasures.deployed();
+    const CollectiblePleasures: ContractFactory = await getContractFactory("CollectiblePleasures"),
+        nft: Contract = await CollectiblePleasures.deploy();
+    await nft.deployed();
+    console.log("NFT deployed to:", nft.address);
 
-    console.log(
-        `CollectiblePleasures deployed to ${collectiblePleasures.address}`
-    );
+    const signer: JsonRpcSigner = provider.getSigner(0);
+    await nft.safeMint(await signer.getAddress(), "ipfs://QmbCwoJB7g9b86BfEahsjzyzzNx3WEu7Jc1opXWgeTXFgb");
+    console.log("NFT Minted!");
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main()
     .then(() => process.exit(0))
     .catch(error => {

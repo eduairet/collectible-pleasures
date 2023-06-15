@@ -1,6 +1,8 @@
-async function run(url: string): Promise<void> {
+import { IPFSHTTPClient } from 'ipfs-http-client';
+
+async function run(imageCIDPath: string): Promise<void> {
     const { create } = await import('ipfs-http-client');
-    const ipfs = create();
+    const ipfs: IPFSHTTPClient = create();
 
     const metadata = {
         path: '/',
@@ -25,7 +27,7 @@ async function run(url: string): Promise<void> {
                 },
             ],
 
-            image: url,
+            image: imageCIDPath,
             description: "Collectible Pleasures NFT"
         })
     };
@@ -36,4 +38,5 @@ async function run(url: string): Promise<void> {
     process.exit(0);
 }
 
-run('');
+run(process.argv[2]);
+// run('QmY9JMmQFbv5z3YkjK9zqfHxYzZg3YkjKs3V7ZJ4xvK7'];
