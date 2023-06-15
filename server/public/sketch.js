@@ -23,7 +23,7 @@ function setup() {
  */
 function draw() {
     background(0);
-    createNft(nft || '');
+    createNft(nft ? nft.replace(/%20/g, ' ') : '   ');
 }
 
 /**

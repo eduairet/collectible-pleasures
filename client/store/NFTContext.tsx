@@ -14,14 +14,14 @@ const NftContext = createContext<NftContextType | null>(null),
         const [nft, setNft] = useState<string>("NFT"),
             [isLoading, setIsLoading] = useState<boolean>(false),
             [error, setError] = useState<string | null>(null),
-            nftFormat = useCallback((nft: string | undefined): string => {
-                if (nft) {
-                    nft = nft.toUpperCase();
-                    if (nft.length < 3) return nft.padEnd(3, ' ');
-                    else if (nft.length > 3) return nft.slice(0, 3);
-                    return nft;
+            nftFormat = useCallback((_nft: string | undefined): string => {
+                if (_nft?.trim()) {
+                    _nft = _nft.toUpperCase();
+                    if (_nft.length < 3) return _nft.padEnd(3, ' ');
+                    else if (_nft.length > 3) return _nft.slice(0, 3);
+                    return _nft;
                 }
-                return '   ';
+                return 'NFT';
             }, []),
             [url, setUrl] = useState<string>(`${process.env.NEXT_PUBLIC_SERVER}?nft=${nftFormat(nft)}`),
             getPreview = useCallback(async (nft: string): Promise<void> => {

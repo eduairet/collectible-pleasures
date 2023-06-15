@@ -7,7 +7,6 @@ const express = require('express'),
     PORT = 8080,
     sketch = require('./routes/sketch-route');
 
-require('dotenv').config();
 const corsOptions = {
     origin: `*`,
 };
