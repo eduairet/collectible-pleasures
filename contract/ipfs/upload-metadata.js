@@ -1,8 +1,6 @@
-import { IPFSHTTPClient } from 'ipfs-http-client';
-
-async function run(imageCIDPath: string): Promise<void> {
-    const { create } = await import('ipfs-http-client');
-    const ipfs: IPFSHTTPClient = create();
+async function run(imageCIDPath) {
+    const { create } = await import('ipfs-core');
+    const ipfs = await create();
 
     const metadata = {
         path: '/',
@@ -39,4 +37,3 @@ async function run(imageCIDPath: string): Promise<void> {
 }
 
 run(process.argv[2]);
-// run('QmY9JMmQFbv5z3YkjK9zqfHxYzZg3YkjKs3V7ZJ4xvK7'];

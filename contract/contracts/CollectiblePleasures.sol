@@ -11,7 +11,7 @@ contract CollectiblePleasures is ERC721, ERC721URIStorage, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("CollectiblePleasures", "CP") {}
+    constructor() ERC721("CollectiblePleasures", "CPS") {}
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
@@ -19,6 +19,8 @@ contract CollectiblePleasures is ERC721, ERC721URIStorage, Ownable {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
+
+    // The following functions are overrides required by Solidity.
 
     function _burn(
         uint256 tokenId
@@ -30,5 +32,11 @@ contract CollectiblePleasures is ERC721, ERC721URIStorage, Ownable {
         uint256 tokenId
     ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC721, ERC721URIStorage) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 }

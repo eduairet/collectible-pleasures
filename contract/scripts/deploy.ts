@@ -11,7 +11,7 @@ async function main(): Promise<void> {
     console.log("NFT deployed to:", nft.address);
 
     const signer: JsonRpcSigner = provider.getSigner(0);
-    await nft.safeMint(await signer.getAddress(), "ipfs://QmbCwoJB7g9b86BfEahsjzyzzNx3WEu7Jc1opXWgeTXFgb");
+    await nft.safeMint(await signer.getAddress(), "ipfs://QmPDf8jgtpoD97YUCa6WCzmSgsNmt96Wgkt93CTVmQgKzP");
     console.log("NFT Minted!");
 }
 
