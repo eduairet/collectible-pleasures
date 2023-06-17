@@ -17,9 +17,10 @@ export default async function handler(
             }
             if (NEXT_PUBLIC_SERVER) {
                 const response = await axios.post(`${NEXT_PUBLIC_SERVER}/mint`,
-                    { nft, address },
+                    { nft },
                 );
-                console.log(response.data);
+                const { ipnft, url } = response.data;
+                console.log(ipnft, url);
                 res.status(200).json({ message: 'Minting...' });;
             } else {
                 throw new Error('We have problems with our server, please try again later.');
@@ -30,7 +31,7 @@ export default async function handler(
         }
     } catch (err: any) {
         res.status(500).json({
-            message: err.message,
+            message: 'We couldn\'t mint your NFT, please try again later.'
         });
     }
 }

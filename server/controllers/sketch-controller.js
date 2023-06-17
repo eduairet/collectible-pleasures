@@ -1,8 +1,12 @@
 'use strict';
 
 const path = require('path'),
+    { storeNFT } = require('../scripts/nft-storage'),
     dir = path.dirname(__dirname),
     filePath = path.join(dir, 'public', 'sketch.html');
+
+require('dotenv').config();
+const { NFT_STORAGE_KEY } = process.env;
 
 const createSketch = (req, res) => {
     if (!Object.keys(req.query)) {
@@ -33,9 +37,21 @@ const sendSketch = (req, res) => {
     res.status(200).sendFile(path.join(dir, 'public', 'sketch.js'));
 };
 
-const mintSketch = (req, res) => {
-    console.log(req.body);
-    res.status(200).json("Minting");
+const mintSketch = async (req, res) => {
+    const { nft } = req.body;
+    if (!nft || !/^[a-zA-Z\s]{3}/.test(nft)) {
+        res.status(400).send('Please provide a correct NFT name!');
+        return;
+    }
+    const fnft = nft.toLowerCase().replace(/\s/g, '0');
+    const baseUrl = 'https://raw.githubusercontent.com/eduairet/collectible-pleasures-generator/master/gifs/'
+    const imageUrl = path.join(baseUrl, `${fnft}.gif`);
+    try {
+        const { ipnft, url } = await storeNFT(imageUrl, nft, `Collectible Pleasures: ${nft}`);
+        res.status(200).json({ ipnft, url });
+    } catch (error) {
+        res.status(500).json({ error: 'We couldn\'t store your NFT on IPFS, please try later!' });
+    }
 };
 
 module.exports = { createSketch, mintSketch, sendStyles, sendLetters, sendSketch };
