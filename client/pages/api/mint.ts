@@ -1,30 +1,36 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-type Data = {};
+import axios from 'axios';
 const { NEXT_PUBLIC_SERVER } = process.env;
 
-console.log(NEXT_PUBLIC_SERVER);
+type Data = {};
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
     try {
-        const { nft } = req.query;
-        if (NEXT_PUBLIC_SERVER && nft) {
-            console.log('Mint');
-            const response = await fetch(`${NEXT_PUBLIC_SERVER}?nft=${nft}`);
-            if (!response.ok) {
-                throw new Error('There was something wrong with your minting, reload the page and try again!');
+        const requestMethod = req.method;
+        if (requestMethod === 'POST') {
+            const { nft, address } = req.body;
+            if (!nft || !address) {
+                throw new Error('Fix your request and try again!');
             }
-            res.status(200).send(response);
-        } else {
-            throw new Error('Fix your query and try again!');
+            if (NEXT_PUBLIC_SERVER) {
+                const response = await axios.post(`${NEXT_PUBLIC_SERVER}/mint`,
+                    { nft, address },
+                );
+                console.log(response.data);
+                res.status(200).json({ message: 'Minting...' });;
+            } else {
+                throw new Error('We have problems with our server, please try again later.');
+            }
         }
-    } catch (error) {
+        else {
+            res.status(200).json({ message: 'Collectible Pleasures' });
+        }
+    } catch (err: any) {
         res.status(500).json({
-            error: 'There was an error with your request, reload the page and try again.',
+            message: err.message,
         });
     }
 }

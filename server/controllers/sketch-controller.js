@@ -34,7 +34,8 @@ const sendSketch = (req, res) => {
 };
 
 const mintSketch = (req, res) => {
-    res.status(200).send('minting');
+    console.log(req.body);
+    res.status(200).json("Minting");
 };
 
 module.exports = { createSketch, mintSketch, sendStyles, sendLetters, sendSketch };

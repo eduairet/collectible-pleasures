@@ -1,16 +1,28 @@
-import { useCallback, useState, useContext, useEffect } from 'react';
+import { useCallback, useState, useContext, useEffect, FormEventHandler } from 'react';
+import axios from 'axios';
 import { NftContext } from '@/store/nft-context';
 import { ETHContext } from '@/store/eth-context';
 import Preview from '@/components/Preview';
+import ErrorDialog from '@/components/ErrorDialog';
 
 export default function NFTForm() {
     const nftCtx = useContext(NftContext),
         ethCtx = useContext(ETHContext),
-        { isConnected } = ethCtx,
+        { isConnected, address } = ethCtx,
         [isDisabled, setIsDisabled] = useState<boolean>(true),
-        handleMint = useCallback(async () => {
-            console.log('Minting...');
-        }, []);
+        [mintError, setMintError] = useState<string | null>(null),
+        handleMint: FormEventHandler<HTMLFormElement> = useCallback(async (e) => {
+            e.preventDefault();
+            setMintError(null);
+            try {
+                const response = await axios.post('api/mint', {
+                    nft: nftCtx?.nft,
+                    address
+                })
+            } catch (err: any) {
+                setMintError(err?.message || 'Something went wrong');
+            }
+        }, [nftCtx?.nft, address]);
 
     useEffect(() => {
         setIsDisabled(!isConnected);
@@ -19,10 +31,7 @@ export default function NFTForm() {
     return (
         <form
             className='w-full max-w-sm flex flex-col gap-6 mt-4 px-3'
-            onSubmit={e => {
-                e.preventDefault();
-                handleMint();
-            }}
+            onSubmit={handleMint}
         >
             <div className='flex flex-col'>
                 <label htmlFor='nft' className='text-center text-lg'>
@@ -32,7 +41,21 @@ export default function NFTForm() {
             </div>
             <input
                 id='nft'
-                className='text-center text-2xl rounded-md p-2 w-full black text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75'
+                className={`
+                    text-center
+                    text-2xl
+                    rounded-md
+                    p-2
+                    w-full
+                    bg-black
+                    border-2
+                    border-white
+                    text-white
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-white
+                    focus:ring-opacity-75
+                `}
                 type='text'
                 minLength={1}
                 maxLength={3}
@@ -69,6 +92,7 @@ export default function NFTForm() {
                     disabled:cursor-not-allowed
                 `}
             />
+            {mintError && <ErrorDialog errorMessage={mintError} />}
         </form>
     );
 }
