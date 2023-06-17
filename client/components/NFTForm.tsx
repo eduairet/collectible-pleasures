@@ -4,6 +4,7 @@ import { NftContext } from '@/store/nft-context';
 import { ETHContext } from '@/store/eth-context';
 import Preview from '@/components/Preview';
 import ErrorDialog from '@/components/ErrorDialog';
+import BigSpinner from './BigSpinner';
 
 export default function NFTForm() {
     const nftCtx = useContext(NftContext),
@@ -11,7 +12,9 @@ export default function NFTForm() {
         { isConnected, address } = ethCtx,
         [isDisabled, setIsDisabled] = useState<boolean>(true),
         [mintError, setMintError] = useState<string | null>(null),
+        [isMinting, setIsMinting] = useState<boolean>(false),
         handleMint: FormEventHandler<HTMLFormElement> = useCallback(async (e) => {
+            setIsMinting(true);
             e.preventDefault();
             setMintError(null);
             try {
@@ -22,6 +25,7 @@ export default function NFTForm() {
             } catch (err: any) {
                 setMintError(err?.message || 'Something went wrong');
             }
+            setIsMinting(false);
         }, [nftCtx?.nft, address]);
 
     useEffect(() => {
@@ -30,7 +34,7 @@ export default function NFTForm() {
 
     return (
         <form
-            className='w-full max-w-sm flex flex-col gap-6 mt-4 px-3'
+            className='relative w-full max-w-sm flex flex-col gap-6 mt-4 px-3'
             onSubmit={handleMint}
         >
             <div className='flex flex-col'>
@@ -67,8 +71,8 @@ export default function NFTForm() {
             <Preview />
             <input
                 type='submit'
-                value='MINT'
-                disabled={isDisabled}
+                value={isMinting ? 'WAIT' : 'MINT'}
+                disabled={isDisabled || isMinting}
                 className={`
                     mx-auto w-20
                     h-20
@@ -93,6 +97,7 @@ export default function NFTForm() {
                 `}
             />
             {mintError && <ErrorDialog errorMessage={mintError} />}
+            {isMinting ? <BigSpinner action='Minting...' /> : null}
         </form>
     );
 }
