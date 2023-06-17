@@ -1,27 +1,31 @@
-import { createContext, useState, PropsWithChildren } from 'react';
+import { createContext, PropsWithChildren } from 'react';
 import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultWallets, RainbowKitProvider, midnightTheme } from '@rainbow-me/rainbowkit';
+import { connectorsForWallets, RainbowKitProvider, midnightTheme } from '@rainbow-me/rainbowkit';
+import {
+    metaMaskWallet,
+    injectedWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { ThemeOptions } from '@rainbow-me/rainbowkit/dist/themes/baseTheme';
-import { useAccount, useConnect } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { useAccount } from 'wagmi';
 
-const { NEXT_PUBLIC_SEPOLIA_KEY } = process.env;
 const { chains, publicClient } = configureChains(
     [sepolia],
     [
-        alchemyProvider({ apiKey: NEXT_PUBLIC_SEPOLIA_KEY || '' }),
+        alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_SEPOLIA_KEY || '' }),
         publicProvider()
     ]
 );
-const { connectors } = getDefaultWallets({
-    appName: 'CollectiblePleasures',
-    projectId: '...',
-    chains
-});
+const connectors = connectorsForWallets([{
+    groupName: 'Collectible Pleasures',
+    wallets: [
+        metaMaskWallet({ chains, projectId: 'CollectiblePleasures' }),
+        injectedWallet({ chains }),
+    ],
+}]);
 const wagmiConfig = createConfig({
     autoConnect: true,
     connectors,

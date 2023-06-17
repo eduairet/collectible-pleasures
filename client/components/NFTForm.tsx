@@ -1,10 +1,13 @@
 import { useCallback, useContext } from 'react';
 import { NftContext } from '@/store/nft-context';
+import { ETHContext } from '@/store/eth-context';
 import Preview from '@/components/Preview';
 
 export default function NFTForm() {
     const nftCtx = useContext(NftContext),
+        ethCtx = useContext(ETHContext),
         handleMint = useCallback(async () => {
+            console.log(!ethCtx?.address);
             console.log('Minting...');
         }, []);
 
@@ -37,6 +40,7 @@ export default function NFTForm() {
             <input
                 type='submit'
                 value='MINT'
+                disabled={!ethCtx?.address}
                 className='mx-auto w-20 h-20 cursor-pointer rounded-full bg-black text-white border-white border-2 font-semibold hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75 ease-in-out duration-300'
             />
         </form>
