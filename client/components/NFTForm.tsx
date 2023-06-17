@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react';
-import { NftContext } from '@/store/NFTContext';
+import { NftContext } from '@/store/nft-context';
 import Preview from '@/components/Preview';
 
 export default function NFTForm() {

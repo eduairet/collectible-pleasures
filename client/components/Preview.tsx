@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NftContext } from '@/store/NFTContext'
+import { NftContext } from '@/store/nft-context'
 import Error from "./Error";
 import PreviewSpinner from "./PreviewSpinner";
 
