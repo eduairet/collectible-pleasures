@@ -5,9 +5,6 @@ const path = require('path'),
     dir = path.dirname(__dirname),
     filePath = path.join(dir, 'public', 'sketch.html');
 
-require('dotenv').config();
-const { NFT_STORAGE_KEY } = process.env;
-
 const createSketch = (req, res) => {
     if (!Object.keys(req.query)) {
         res.status(200).send('Write a query to generate your art');

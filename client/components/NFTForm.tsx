@@ -1,10 +1,12 @@
-import { useCallback, useState, useContext, useEffect, FormEventHandler } from 'react';
+import { useCallback, useState, useContext, useEffect, FormEventHandler, MouseEventHandler } from 'react';
 import axios from 'axios';
 import { NftContext } from '@/store/nft-context';
 import { ETHContext } from '@/store/eth-context';
 import Preview from '@/components/Preview';
 import ErrorDialog from '@/components/ErrorDialog';
-import BigSpinner from './BigSpinner';
+import BigSpinner from '@/components/BigSpinner';
+import TxModal from '@/components/TxModal';
+import { mintNFT } from '@/utils/mintNFT';
 
 export default function NFTForm() {
     const nftCtx = useContext(NftContext),
@@ -13,39 +15,47 @@ export default function NFTForm() {
         [isDisabled, setIsDisabled] = useState<boolean>(true),
         [mintError, setMintError] = useState<string | null>(null),
         [isMinting, setIsMinting] = useState<boolean>(false),
+        [hashUrl, setHashUrl] = useState<`https://${string}` | null>(null),
         handleMint: FormEventHandler<HTMLFormElement> = useCallback(async (e) => {
-            setIsMinting(true);
             e.preventDefault();
             setMintError(null);
+            setIsMinting(true);
             try {
-                const response = await axios.post('api/mint', {
+                const { data } = await axios.post('api/mint', {
                     nft: nftCtx?.nft,
-                    address
                 })
-            } catch (err: any) {
-                setMintError(err?.message || 'Something went wrong');
+                if (data.success && address) {
+                    const hash = await mintNFT(data.url);
+                    setHashUrl(`${process.env.NEXT_PUBLIC_EXPLORER}tx/${hash}` as `https://${string}`);
+                }
+            } catch (_: any) {
+                setMintError('We couldn\'t mint your NFT, please refresh the page and try again!');
             }
             setIsMinting(false);
-        }, [nftCtx?.nft, address]);
+        }, [nftCtx?.nft, address]),
+        handleClose: MouseEventHandler<HTMLButtonElement | HTMLDivElement> = useCallback(() => {
+            setHashUrl(null);
+        }, []);
 
     useEffect(() => {
         setIsDisabled(!isConnected);
     }, [isConnected]);
 
     return (
-        <form
-            className='relative w-full max-w-sm flex flex-col gap-6 mt-4 px-3'
-            onSubmit={handleMint}
-        >
-            <div className='flex flex-col'>
-                <label htmlFor='nft' className='text-center text-lg'>
-                    Type your 3 letter NFT name
-                </label>
-                <p className='text-center text-sm italic'>(A-Z letters and space only)</p>
-            </div>
-            <input
-                id='nft'
-                className={`
+        <>
+            <form
+                className='relative w-full max-w-sm flex flex-col gap-6 mt-4 px-3'
+                onSubmit={handleMint}
+            >
+                <div className='flex flex-col'>
+                    <label htmlFor='nft' className='text-center text-lg'>
+                        Type your 3 letter NFT name
+                    </label>
+                    <p className='text-center text-sm italic'>(A-Z letters and space only)</p>
+                </div>
+                <input
+                    id='nft'
+                    className={`
                     text-center
                     text-2xl
                     rounded-md
@@ -60,20 +70,20 @@ export default function NFTForm() {
                     focus:ring-white
                     focus:ring-opacity-75
                 `}
-                type='text'
-                minLength={1}
-                maxLength={3}
-                value={nftCtx?.nft}
-                onChange={e => {
-                    nftCtx?.handleNft(e.target.value);
-                }}
-            />
-            <Preview />
-            <input
-                type='submit'
-                value={isMinting ? 'WAIT' : 'MINT'}
-                disabled={isDisabled || isMinting}
-                className={`
+                    type='text'
+                    minLength={1}
+                    maxLength={3}
+                    value={nftCtx?.nft}
+                    onChange={e => {
+                        nftCtx?.handleNft(e.target.value);
+                    }}
+                />
+                <Preview />
+                <input
+                    type='submit'
+                    value={isMinting ? 'WAIT' : 'MINT'}
+                    disabled={isDisabled || isMinting}
+                    className={`
                     mx-auto w-20
                     h-20
                     cursor-pointer
@@ -95,9 +105,11 @@ export default function NFTForm() {
                     disabled:text-white
                     disabled:cursor-not-allowed
                 `}
-            />
-            {mintError && <ErrorDialog errorMessage={mintError} />}
-            {isMinting ? <BigSpinner action='Minting...' /> : null}
-        </form>
+                />
+                {mintError && <ErrorDialog errorMessage={mintError} />}
+                {isMinting ? <BigSpinner action='Minting...' /> : null}
+            </form>
+            {hashUrl ? <TxModal title='Successfully Minted!' url={hashUrl} onClose={handleClose} /> : null}
+        </>
     );
 }
