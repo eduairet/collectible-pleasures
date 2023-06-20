@@ -11,7 +11,7 @@ import { mintNFT } from '@/utils/mintNFT';
 export default function NFTForm() {
     const nftCtx = useContext(NftContext),
         ethCtx = useContext(ETHContext),
-        { isConnected, address } = ethCtx,
+        { isConnected, address, chain } = ethCtx,
         [isDisabled, setIsDisabled] = useState<boolean>(true),
         [mintError, setMintError] = useState<string | null>(null),
         [isMinting, setIsMinting] = useState<boolean>(false),
@@ -24,9 +24,10 @@ export default function NFTForm() {
                 const { data } = await axios.post('api/mint', {
                     nft: nftCtx?.nft,
                 })
-                if (data.success && address) {
-                    const hash = await mintNFT(data.url);
-                    setHashUrl(`${process.env.NEXT_PUBLIC_EXPLORER}tx/${hash}` as `https://${string}`);
+                if (data.success && address && chain) {
+                    const hash = await mintNFT(data.url, chain);
+                    setHashUrl(`${chain.name === 'Polygon' ? process.env.NEXT_PUBLIC_POLYGON_EXPLORER : chain.name === 'Sepolia' ? process.env.NEXT_PUBLIC_SEPOLIA_EXPLORER : ''
+                        }tx/${hash}` as `https://${string}`);
                 }
             } catch (_: any) {
                 setMintError('We couldn\'t mint your NFT, please refresh the page and try again!');
