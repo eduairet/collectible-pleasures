@@ -10,7 +10,7 @@ import { sepolia, polygon } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { ThemeOptions } from '@rainbow-me/rainbowkit/dist/themes/baseTheme';
-import { useAccount, useNetwork, Chain } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 
 const { chains, publicClient } = configureChains(
     [polygon, sepolia],
@@ -42,19 +42,16 @@ const themeOptions: ThemeOptions = {
 
 interface User {
     address: `0x${string}` | undefined,
-    chain: Chain | undefined,
     isConnected: boolean,
 }
 
 const ETHContext = createContext({
     address: undefined,
-    chain: undefined,
     isConnected: false,
 } as User);
 
 const ETHProvider = (props: PropsWithChildren) => {
-    const { address, isConnected } = useAccount(),
-        { chain } = useNetwork();
+    const { address, isConnected } = useAccount();
 
     return (
         <WagmiConfig config={wagmiConfig}>
@@ -63,7 +60,7 @@ const ETHProvider = (props: PropsWithChildren) => {
                 theme={midnightTheme(themeOptions)}
                 modalSize="compact"
             >
-                <ETHContext.Provider value={{ address, chain, isConnected }}>
+                <ETHContext.Provider value={{ address, isConnected }}>
                     {props.children}
                 </ETHContext.Provider>
             </RainbowKitProvider>

@@ -1,5 +1,6 @@
 import { useCallback, useState, useContext, useEffect, FormEventHandler, MouseEventHandler } from 'react';
 import axios from 'axios';
+import { useNetwork } from 'wagmi';
 import { NftContext } from '@/store/nft-context';
 import { ETHContext } from '@/store/eth-context';
 import Preview from '@/components/Preview';
@@ -11,7 +12,8 @@ import { mintNFT } from '@/utils/mintNFT';
 export default function NFTForm() {
     const nftCtx = useContext(NftContext),
         ethCtx = useContext(ETHContext),
-        { isConnected, address, chain } = ethCtx,
+        { chain } = useNetwork(),
+        { isConnected, address } = ethCtx,
         [isDisabled, setIsDisabled] = useState<boolean>(true),
         [mintError, setMintError] = useState<string | null>(null),
         [isMinting, setIsMinting] = useState<boolean>(false),
@@ -33,7 +35,7 @@ export default function NFTForm() {
                 setMintError('We couldn\'t mint your NFT, please refresh the page and try again!');
             }
             setIsMinting(false);
-        }, [nftCtx?.nft, address]),
+        }, [nftCtx?.nft, address, chain]),
         handleClose: MouseEventHandler<HTMLButtonElement | HTMLDivElement> = useCallback(() => {
             setHashUrl(null);
         }, []);
