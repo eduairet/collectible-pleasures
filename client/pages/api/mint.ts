@@ -22,6 +22,7 @@ export default async function handler(
             if (NEXT_PUBLIC_SERVER) {
                 const response = await axios.post(`${NEXT_PUBLIC_SERVER}/mint`,
                     { nft },
+                    { headers: { 'x-internal-secret': process.env.INTERNAL_API_SECRET } },
                 );
                 const { url }: IPFSData = response.data;
                 res.status(200).json({ success: true, url });

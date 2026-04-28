@@ -7,17 +7,26 @@ import {
 } from '@rainbow-me/rainbowkit/wallets';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { sepolia, polygon } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import { ThemeOptions } from '@rainbow-me/rainbowkit/dist/themes/baseTheme';
 import { useAccount, useNetwork } from 'wagmi';
 
+const RPC_SLUG: Record<number, string> = {
+    [polygon.id]: 'polygon',
+    [sepolia.id]: 'sepolia',
+};
+
 const { chains, publicClient } = configureChains(
     [polygon, sepolia],
     [
-        alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_POLYGON_KEY || '' }),
-        alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_SEPOLIA_KEY || '' }),
-        publicProvider()
+        jsonRpcProvider({
+            rpc: (chain) => {
+                const slug = RPC_SLUG[chain.id];
+                return slug ? { http: `/api/rpc/${slug}` } : null;
+            },
+        }),
+        publicProvider(),
     ]
 );
 const connectors = connectorsForWallets([{
