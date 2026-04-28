@@ -42,11 +42,12 @@ const mintSketch = async (req, res) => {
     }
     const fnft = nft.toLowerCase().replace(/\s/g, '0');
     const baseUrl = 'https://raw.githubusercontent.com/eduairet/collectible-pleasures-generator/master/gifs/'
-    const imageUrl = path.join(baseUrl, `${fnft}.gif`);
+    const imageUrl = `${baseUrl}${fnft}.gif`;
     try {
         const { ipnft, url } = await storeNFT(imageUrl, nft, `Collectible Pleasures: ${nft}`);
         res.status(200).json({ ipnft, url });
     } catch (error) {
+        console.error('storeNFT failed:', error);
         res.status(500).json({ error: 'We couldn\'t store your NFT on IPFS, please try later!' });
     }
 };
