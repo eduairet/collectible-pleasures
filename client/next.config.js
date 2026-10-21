@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Repo-root package-lock.json would make Next 15 trace the wrong tree.
+  outputFileTracingRoot: __dirname,
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     return config;
@@ -8,7 +10,6 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // matching all API routes
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
