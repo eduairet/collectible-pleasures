@@ -1,11 +1,8 @@
-const path = require('path');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // The repo root has its own package-lock.json. Next 15 would otherwise
-  // treat that directory as the file-tracing root and miss this app.
-  outputFileTracingRoot: path.join(__dirname),
+  // Repo-root package-lock.json would make Next 15 trace the wrong tree.
+  outputFileTracingRoot: __dirname,
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     return config;
@@ -13,7 +10,6 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // matching all API routes
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
