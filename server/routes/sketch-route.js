@@ -12,12 +12,6 @@ const requireInternalSecret = (req, res, next) => {
     next();
 };
 
-// TEMPORARY: delete after reading process.version on the deploy.
-router.route('/__node_version').get((_req, res) => {
-    res.set('Cache-Control', 'no-store');
-    res.json({ node: process.version });
-});
-
 router.route('/').get(createSketch);
 router.route('/mint').post(requireInternalSecret, mintSketch);
 router.route('/style.css').get(sendStyles);
